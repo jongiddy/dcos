@@ -14,3 +14,10 @@ ln -s "$PKG_PATH/usr/java/bin/java" "$PKG_PATH/bin/java"
 ln -s "$PKG_PATH/usr/java/bin/java_vm" "$PKG_PATH/bin/java_vm"
 ln -s "$PKG_PATH/usr/java/bin/jps" "$PKG_PATH/bin/jps"
 ln -s "$PKG_PATH/usr/java/bin/keytool" "$PKG_PATH/bin/keytool"
+
+# point to system keystore
+if [ -r "/etc/pki/java/cacerts" ]
+then
+    rm "$PKG_PATH/usr/java/jre/lib/security/cacerts"
+    ln -s "/etc/pki/java/cacerts" "$PKG_PATH/usr/java/jre/lib/security/cacerts"
+fi

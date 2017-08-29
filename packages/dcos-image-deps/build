@@ -14,3 +14,14 @@ for package in aiohttp chardet coloredlogs docker-py humanfriendly multidict oau
     waitress websocket-client; do
   pip3 install --no-deps --install-option="--prefix=$PKG_PATH" --root=/ /pkg/src/$package
 done
+
+# point to system CA bundle
+if [ -r "/etc/pki/tls/certs/ca-bundle.crt" ]
+then
+    paths=$(find $PKG_PATH -name cacert.pem)
+    for path in $paths
+    do
+        rm "$path"
+        ln -s "/etc/pki/tls/certs/ca-bundle.crt" "$path"
+    done
+fi

@@ -10,3 +10,14 @@ done
 cfn_signal="$PKG_PATH/bin/cfn-signal"
 mkdir -p $(dirname "$cfn_signal")
 cp /pkg/extra/cfn-signal "$cfn_signal"
+
+# point to system CA bundle
+if [ -r "/etc/pki/tls/certs/ca-bundle.crt" ]
+then
+    paths=$(find $PKG_PATH -name cacert.pem)
+    for path in $paths
+    do
+        rm "$path"
+        ln -s "/etc/pki/tls/certs/ca-bundle.crt" "$path"
+    done
+fi
