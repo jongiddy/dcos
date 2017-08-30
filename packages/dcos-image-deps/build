@@ -16,12 +16,15 @@ for package in aiohttp chardet coloredlogs docker-py humanfriendly multidict oau
 done
 
 # point to system CA bundle
-if [ -r "/etc/pki/tls/certs/ca-bundle.crt" ]
-then
-    paths=$(find $PKG_PATH -name cacert.pem)
-    for path in $paths
-    do
-        rm "$path"
-        ln -s "/etc/pki/tls/certs/ca-bundle.crt" "$path"
-    done
-fi
+for bundle in "/etc/ssl/certs/ca-certificates.crt" "/etc/pki/tls/certs/ca-bundle.crt"
+do
+    if [ -r "$bundle" ]
+    then
+        paths=$(find $PKG_PATH -name cacert.pem)
+        for path in $paths
+        do
+            rm "$path"
+            ln -s "$bundle" "$path"
+        done
+    fi
+done
